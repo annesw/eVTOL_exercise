@@ -1,6 +1,7 @@
 // simulation_manager.cpp
 #include <iostream>
 #include <random>
+#include <cstdlib>
 using namespace std;
 
 #include "aircraft.h"
@@ -8,6 +9,7 @@ using namespace std;
 #include "chargers_and_queue.h"
 
 extern ChargerQueue* g_charger_queue_ptr;
+extern FaultGenerator* g_fault_generator;
 
 // Initial data for different aircraft types. 
 typedef struct _aircraft_info {
@@ -61,6 +63,7 @@ void SimulationManager::run_simulation(void){
 
   // Give aircraft access to the charging queue.
   g_charger_queue_ptr = &charger_queue;
+  g_fault_generator = &fault_generator;
 
   for (second_count = 0; second_count <= SECONDS_IN_SIMULATION; second_count++) { // Go one extra second because we start on 1;
 
@@ -69,4 +72,14 @@ void SimulationManager::run_simulation(void){
     } 
     charger_queue.one_second_tick(); 
   }
+}
+
+FaultGenerator::FaultGenerator(){
+  srand (static_cast <unsigned> (time(0)));
+}
+
+bool FaultGenerator::did_a_fault_occur(double probablity){
+   double random_between_zero_and_one;
+   random_between_zero_and_one =  rand() / (RAND_MAX + 1.0);
+   return (random_between_zero_and_one < probablity); 
 }

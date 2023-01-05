@@ -10,6 +10,12 @@
 #define NUMBER_OF_AIRCRAFT 20
 #define SECONDS_IN_SIMULATION 10800  // 3 hours
 
+class FaultGenerator{
+public:
+   FaultGenerator();
+   bool did_a_fault_occur(double probablity);
+};
+
 // The SimulationManager will create the aircraft, start the TimeManager and
 // have the StatisticReporter print out the results.
 // To Do: May want to make this a singlton, so that there is only SimulationManager.
@@ -22,6 +28,7 @@ public:
    // at runtime and have an array of pointers, a linked list of pointers or some other collection of pointers. 
    Aircraft all_aircraft[NUMBER_OF_AIRCRAFT];
    ChargerQueue charger_queue;
+   FaultGenerator fault_generator;
 
    void create_aircraft(void);
    
@@ -29,7 +36,6 @@ public:
 
    void report_on_data(void);
 };
-
 
 
 

@@ -7,12 +7,47 @@ using namespace std;
 #include "chargers_and_queue.h"
 
 ChargerQueue* g_charger_queue_ptr;
+FaultGenerator* g_fault_generator;
+
+void test_fault_generator(){
+  int i, interations;
+  int number_of_faults;
+  double probability_value;
+  FaultGenerator fault_generator;
+
+  number_of_faults = 0;
+  probability_value = 0.5;
+  interations = 100;
+  for (i = 0; i < interations; i++){
+      if (fault_generator.did_a_fault_occur(probability_value)){
+          number_of_faults++;
+      }
+  }
+  cout << "iterations:" << interations << " probablity: " << probability_value;
+  cout << " number of faults: " << number_of_faults << endl; 
+
+  number_of_faults = 0;
+  probability_value = 0.25 / 60.0;
+  interations = 100 * 60;
+  for (i = 0; i < interations; i++){
+      if (fault_generator.did_a_fault_occur(probability_value)){
+          number_of_faults++;
+      }
+  }
+  cout << "iterations:" << interations << " probablity: " << probability_value;
+  cout << " number of faults: " << number_of_faults << endl; 
+
+
+}
+
+
 
 void run_tests(){
 cout << "Running tests." << endl;
         Aircraft aircraft1;
         cout << "aircraft1 manufacturer " << Aircraft::get_manufacturer_string(Aircraft::Bravo) << endl;
         cout << " RAND_MAX " << RAND_MAX << endl;
+    test_fault_generator();
 
 }
 

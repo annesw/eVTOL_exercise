@@ -1,12 +1,13 @@
 #include "aircraft.h"
 #include "chargers_and_queue.h"
+#include "simulation_manager.h"
 
 #include <iostream>
 #include <string>
 using namespace std;
 
 extern ChargerQueue* g_charger_queue_ptr;
- 
+extern FaultGenerator* g_fault_generator;
 
 Aircraft::Aircraft(){
 manufacturer = Uninitialized;
@@ -70,10 +71,15 @@ string Aircraft::get_manufacturer_string(Aircraft::Manufacturer manufacturer_in)
 
 void Aircraft::one_second_tick(void){
   total_seconds++;
-  // debugging
-  //if (aircraft_id == 1){
-  //  cout << "seconds " << total_seconds << endl;
-  //}
+  // Check for faults once a minute.
+  if ((total_seconds % 60) == 0){
+     if (g_fault_generator->did_a_fault_occur(probablity_of_fault_per_hour / 60)){
+         total_faults++;
+         cout << "Aircraft " << aircraft_id << " " << get_manufacturer_string(manufacturer);
+         cout << " FAULT at second: " << total_seconds << endl;
+     }
+  }
+  
   switch (current_state){
     case (before_simulation):
       // Assume that the first tick is starting the simulation.
