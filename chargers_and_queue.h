@@ -1,10 +1,11 @@
 // chargers_and_queue.h
 
-
 #ifndef CHARGERS_AND_QUEUE_H
 #define CHARGERS_AND_QUEUE_H
 
-class Aircraft;
+#include "aircraft.h"
+
+// remove //class Aircraft;
 #define NUMBER_OF_AIRCRAFT 20
 
 class Charger{
@@ -19,13 +20,6 @@ enum ChargerState{
 Charger();
 
 ChargerState current_state;
-
-void start_charging_aircraft(Aircraft *aircraft_to_charge);
- 
-void aircraft_report_done_and_detach(void);
-
-private:
-Aircraft * charging_aircraft;
 
 };
 
@@ -46,6 +40,8 @@ void one_second_tick(void);
 
 ChargerQueue();
 
+void report_charger_free(int id);
+
 private:
 
 // For the charging queue, I am using a circular buffer of Aircraft pointers. The
@@ -59,7 +55,7 @@ private:
 
 int head; // Take aircraft off the head.
 int tail; // Add aircraft at the tail. 
-Aircraft * aircraft_queue[CHARGING_QUEUE_SIZE];
+Aircraft* aircraft_queue[CHARGING_QUEUE_SIZE];
 
 };
 

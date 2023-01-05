@@ -7,6 +7,8 @@ using namespace std;
 #include "simulation_manager.h"
 #include "chargers_and_queue.h"
 
+extern ChargerQueue* g_charger_queue_ptr;
+
 // Initial data for different aircraft types. 
 typedef struct _aircraft_info {
 Aircraft::Manufacturer manufacturer;
@@ -49,7 +51,7 @@ void SimulationManager::create_aircraft(void){
             // The id will happen to match the index, but they are only intended to be an
             // unique identifier, not an index.
             all_aircraft[i].set_aircraft_id(i); 
-            all_aircraft[i].set_pointer_to_myself(&(all_aircraft[i])); 
+            cout << " pointer address all_aircraft[" << i << "] " << &all_aircraft[i] << endl;
     }
     cout << endl;
 }
@@ -57,6 +59,10 @@ void SimulationManager::create_aircraft(void){
 void SimulationManager::run_simulation(void){
   int second_count;
   int aircraft_index;
+
+  // Give aircraft access to the charging queue.
+  g_charger_queue_ptr = &charger_queue;
+
   for (second_count = 0; second_count <= SECONDS_IN_SIMULATION; second_count++) { // Go one extra second because we start on 1;
 
     for (aircraft_index = 0 ; aircraft_index < NUMBER_OF_AIRCRAFT ; aircraft_index++){

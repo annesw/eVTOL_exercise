@@ -4,7 +4,6 @@
 #define AIRCRAFT_H
 
 #include <string>
-#include "chargers_and_queue.h"
 
 // Class for each individual aircraft. I considered making the Aircraft class
 // a base class and making each manufacturing class a derived class. I ruled this
@@ -67,11 +66,8 @@ int seconds_charging_current_charge;
 int flight_start_second;
 int charge_start_second;
 int aircraft_id;
+int current_charger_id;
 
-Aircraft * ptr_to_myself; // This is an ugly hack because I am having problems returning the this pointer correctly;
-
-Charger *charger_being_used;
-ChargerQueue *charger_queue_to_use;
  
 public:
 Aircraft();
@@ -82,20 +78,18 @@ int flight_time_seconds,
 int passengers,
 float probablity_of_fault);
 
-void set_starting_values(ChargerQueue *charger_queue);
-
 Aircraft::Manufacturer get_manufacturer(void);
 
 static std::string get_manufacturer_string(Aircraft::Manufacturer);
 
 void one_second_tick(void);
 
-void start_charging(Charger * charger_to_use);
+void start_charging(int charger_id);
 
 void set_aircraft_id(int id);
 int get_aircraft_id(void);
-
-void set_pointer_to_myself(Aircraft * my_pointer);
+void put_aircraft_in_charging_queue(void);
+void aircraft_report_done_charging_and_detach(void);
 
 };
 

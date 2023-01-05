@@ -6,6 +6,8 @@ using namespace std;
 #include "simulation_manager.h"
 #include "chargers_and_queue.h"
 
+ChargerQueue* g_charger_queue_ptr;
+
 void run_tests(){
 cout << "Running tests." << endl;
         Aircraft aircraft1;

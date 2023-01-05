@@ -1,8 +1,11 @@
 #include "aircraft.h"
+#include "chargers_and_queue.h"
 
 #include <iostream>
 #include <string>
 using namespace std;
+
+extern ChargerQueue* g_charger_queue_ptr;
  
 
 Aircraft::Aircraft(){
@@ -18,7 +21,6 @@ total_seconds = 0;
 total_seconds_flying = 0;
 seconds_flying_this_charge = 0;
 seconds_charging_current_charge = 0;
-charger_being_used = NULL;
 };
 
 Aircraft Aircraft::operator()(Manufacturer manu,
@@ -66,16 +68,12 @@ string Aircraft::get_manufacturer_string(Aircraft::Manufacturer manufacturer_in)
     return manufacturer_str;
 }
 
-void Aircraft::set_starting_values(ChargerQueue *charger_queue){
-   // Store the charging queue. 
-   charger_queue_to_use = charger_queue;
-}
-
 void Aircraft::one_second_tick(void){
   total_seconds++;
-  if (aircraft_id == 1){
-    cout << "seconds " << total_seconds << endl;
-  }
+  // debugging
+  //if (aircraft_id == 1){
+  //  cout << "seconds " << total_seconds << endl;
+  //}
   switch (current_state){
     case (before_simulation):
       // Assume that the first tick is starting the simulation.
@@ -90,7 +88,7 @@ void Aircraft::one_second_tick(void){
          cout << "Aircraft " << aircraft_id << " " << get_manufacturer_string(manufacturer) << " queueing" << endl;
          // Add ourselves to the queue.
          current_state = waiting_to_charge;
-         charger_queue_to_use->put_aircraft_in_queue(ptr_to_myself);
+         put_aircraft_in_charging_queue();
          cout << "Aircraft " << aircraft_id << " " << get_manufacturer_string(manufacturer) << " queueing" << endl;
       } else {
          // Track total flying seconds.
@@ -105,8 +103,7 @@ void Aircraft::one_second_tick(void){
       // Check if we are done charging.
       if (total_seconds > (charge_start_second + time_to_charge_seconds)) {
             // Detach from the charger
-            charger_being_used->aircraft_report_done_and_detach();
-            charger_being_used = NULL;
+            aircraft_report_done_charging_and_detach();
             // start flying
             current_state = flying; 
             flight_start_second = total_seconds;
@@ -130,15 +127,18 @@ int Aircraft::get_aircraft_id(void){
 }
 
 
-void Aircraft::start_charging(Charger * charger_to_use){
-  charger_being_used = charger_to_use;
+void Aircraft::start_charging(int charger_id){
+  current_charger_id = charger_id;
   charge_start_second = total_seconds;
-  charger_being_used->start_charging_aircraft(this);
   cout << "Aircraft " << aircraft_id << " " << get_manufacturer_string(manufacturer) << " charging" << endl;
    current_state = charging;
 }
 
 
-void Aircraft::set_pointer_to_myself(Aircraft * my_pointer){
-  ptr_to_myself =  my_pointer;
+void Aircraft::put_aircraft_in_charging_queue(void){
+    g_charger_queue_ptr->put_aircraft_in_queue(this);
+}
+
+void Aircraft::aircraft_report_done_charging_and_detach(void){
+    g_charger_queue_ptr->report_charger_free(current_charger_id);
 }
