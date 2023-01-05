@@ -80,16 +80,19 @@ void Aircraft::one_second_tick(void){
       current_state = flying; 
       flight_start_second = total_seconds;
       total_seconds_flying++;
-      cout << "Aircraft " << aircraft_id << " " << get_manufacturer_string(manufacturer) << " flying" << endl;
+      cout << "Aircraft " << aircraft_id << " " << get_manufacturer_string(manufacturer);
+      cout << " flying at second: " << total_seconds << endl;
       break;
     case (flying):
       // Check if we are past the total number of seconds.
       if (total_seconds > (flight_start_second + flight_seconds_per_charge)) {
-         cout << "Aircraft " << aircraft_id << " " << get_manufacturer_string(manufacturer) << " queueing" << endl;
+         cout << "Aircraft " << aircraft_id << " " << get_manufacturer_string(manufacturer);
+         cout << " done flying at second: " << total_seconds << endl;
          // Add ourselves to the queue.
          current_state = waiting_to_charge;
          put_aircraft_in_charging_queue();
-         cout << "Aircraft " << aircraft_id << " " << get_manufacturer_string(manufacturer) << " queueing" << endl;
+         cout << "Aircraft " << aircraft_id << " " << get_manufacturer_string(manufacturer);
+         cout << " queueing at second: " << total_seconds << endl;
       } else {
          // Track total flying seconds.
          total_seconds_flying++;
@@ -108,7 +111,8 @@ void Aircraft::one_second_tick(void){
             current_state = flying; 
             flight_start_second = total_seconds;
             total_seconds_flying++;
-            cout << "Aircraft " << aircraft_id << " " << get_manufacturer_string(manufacturer) << " flying" << endl;
+            cout << "Aircraft " << aircraft_id << " " << get_manufacturer_string(manufacturer);
+            cout << " flying at second: " << total_seconds << endl;
       }
 
       break;
@@ -130,8 +134,10 @@ int Aircraft::get_aircraft_id(void){
 void Aircraft::start_charging(int charger_id){
   current_charger_id = charger_id;
   charge_start_second = total_seconds;
-  cout << "Aircraft " << aircraft_id << " " << get_manufacturer_string(manufacturer) << " charging" << endl;
-   current_state = charging;
+  cout << "Aircraft " << aircraft_id << " " << get_manufacturer_string(manufacturer);
+  cout << " started charging at second: " << total_seconds;
+  cout << " charger id " << current_charger_id << endl;
+  current_state = charging;
 }
 
 
@@ -140,5 +146,8 @@ void Aircraft::put_aircraft_in_charging_queue(void){
 }
 
 void Aircraft::aircraft_report_done_charging_and_detach(void){
+  cout << "Aircraft " << aircraft_id << " " << get_manufacturer_string(manufacturer);
+  cout << " releasing charger at second: " << total_seconds;
+  cout << " charger id " << current_charger_id << endl;
     g_charger_queue_ptr->report_charger_free(current_charger_id);
 }

@@ -28,7 +28,6 @@ void ChargerQueue::put_aircraft_in_queue(Aircraft *aircraft_to_queue){
     if (tail >= CHARGING_QUEUE_SIZE) {
        tail = 0;
     }
-    cout << " tail = " << tail << endl;
 }
 
 void ChargerQueue::one_second_tick(){
@@ -36,8 +35,6 @@ void ChargerQueue::one_second_tick(){
  // Check if any of the chargers are free. Start charging any waiting aircraft if there is a free charger.
  for (i = 0; i < NUMBER_OF_CHARGERS; i++) {
      if (chargers[i].current_state == Charger::empty){
-        //cout << "charger empty" << i << endl;
-        //cout << "head " << head << "   tail " << tail << endl;
         if (head != tail) {
         // There is at least one aircraft in the queue.
             chargers[i].current_state = Charger::charging;
@@ -51,11 +48,8 @@ void ChargerQueue::one_second_tick(){
             // We do not need to check the other chargers if there are no aircraft in the queue.
             break;
         }
-
      }
-
  }
-  
 }
 
 void ChargerQueue::report_charger_free(int id){

@@ -32,7 +32,7 @@ aircraft_info initial_aircraft_data[] = {
 void SimulationManager::create_aircraft(void){
     int i, aircraft_type;
     Aircraft A1;
-    cout << "called create_aircraft()" << endl;
+    cout << "creating aircraft" << endl;
     random_device rd; // obtain a random number from hardware
     mt19937 gen(rd()); // seed the generator
     uniform_int_distribution<> distr(0, 4); // define the range
@@ -51,7 +51,6 @@ void SimulationManager::create_aircraft(void){
             // The id will happen to match the index, but they are only intended to be an
             // unique identifier, not an index.
             all_aircraft[i].set_aircraft_id(i); 
-            cout << " pointer address all_aircraft[" << i << "] " << &all_aircraft[i] << endl;
     }
     cout << endl;
 }

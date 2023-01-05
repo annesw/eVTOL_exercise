@@ -25,7 +25,6 @@ int main(int argc, char** argv){
         }
         Aircraft aircraft1;
         SimulationManager sim_manager;
-	cout << "Hello World" << endl;
         sim_manager.create_aircraft();
         sim_manager.run_simulation();
         cout << "simulation done" << endl;
