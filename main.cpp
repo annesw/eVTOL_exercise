@@ -55,18 +55,18 @@ void run_tests(){
 }
 
 int main(int argc, char** argv){
-        if (argc > 1){
-           if(strcmp(argv[1], "tests") == 0){
-               run_tests();
-               exit (0);
-           }
-        }
-        Aircraft aircraft1;
-        SimulationManager sim_manager;
-        sim_manager.create_aircraft();
-        sim_manager.run_simulation();
-        cout << endl << "Simulation Done" << endl << endl;
-        sim_manager.report_on_data();
-	return 0;
+    if (argc > 1){
+       if(strcmp(argv[1], "tests") == 0){
+           run_tests();
+           exit (0);
+       }
+    }
+    Aircraft aircraft1;
+    SimulationManager sim_manager;
+    sim_manager.create_aircraft();
+    sim_manager.run_simulation();
+    cout << endl << "Simulation Done" << endl << endl;
+    sim_manager.report_on_data();
+    return 0;
 }
 

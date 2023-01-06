@@ -27,3 +27,6 @@ I expected.
 
 Another thing I might change, there are a couple global variables that could be 
 replaced using static member functions to the classes.
+
+Some of my times may still be off by one second. In general, I would double check
+all my numbers.

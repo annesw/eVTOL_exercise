@@ -10,36 +10,36 @@ extern ChargerQueue* g_charger_queue_ptr;
 extern FaultGenerator* g_fault_generator;
 
 Aircraft::Aircraft(){
-manufacturer = Uninitialized;
-cruise_speed_mph = 1;
-time_to_charge_seconds = 1;
-flight_seconds_per_charge = 1;
-passenger_count = 1;
-probablity_of_fault_per_hour = 0.1;
-current_state = before_simulation;
-total_faults = 0;
-total_seconds = 0;
-total_seconds_flying = 0;
-number_of_flights = 0;
-number_of_charges = 0;
-total_seconds_charging = 0;
+  manufacturer = Uninitialized;
+  cruise_speed_mph = 1;
+  time_to_charge_seconds = 1;
+  flight_seconds_per_charge = 1;
+  passenger_count = 1;
+  probablity_of_fault_per_hour = 0.1;
+  current_state = before_simulation;
+  total_faults = 0;
+  total_seconds = 0;
+  total_seconds_flying = 0;
+  number_of_flights = 0;
+  number_of_charges = 0;
+  total_seconds_charging = 0;
 };
 
 Aircraft Aircraft::operator()(Manufacturer manu,
-int cruise_speed,
-int seconds_to_charge, 
-int flight_time_seconds,
-int passengers,
-float probablity_of_fault){
+  int cruise_speed,
+  int seconds_to_charge, 
+  int flight_time_seconds,
+  int passengers,
+  float probablity_of_fault){
 
-Aircraft A;
-A.manufacturer = manu;
-A.cruise_speed_mph = cruise_speed;
-A.time_to_charge_seconds = seconds_to_charge;
-A.flight_seconds_per_charge = flight_time_seconds;
-A.passenger_count = passengers;
-A.probablity_of_fault_per_hour = probablity_of_fault;
-return A;
+  Aircraft A;
+  A.manufacturer = manu;
+  A.cruise_speed_mph = cruise_speed;
+  A.time_to_charge_seconds = seconds_to_charge;
+  A.flight_seconds_per_charge = flight_time_seconds;
+  A.passenger_count = passengers;
+  A.probablity_of_fault_per_hour = probablity_of_fault;
+  return A;
 }
 
 Aircraft::Manufacturer Aircraft::get_manufacturer(void){

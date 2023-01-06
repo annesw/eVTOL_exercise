@@ -15,12 +15,12 @@ extern FaultGenerator* g_fault_generator;
 
 // Initial data for different aircraft types. 
 typedef struct _aircraft_info {
-Aircraft::Manufacturer manufacturer;
-int cruise_speed_mph;
-int time_to_charge_seconds;
-int flight_time_from_full_charge_seconds;
-int passenger_count;
-float probablity_of_fault_per_hour;
+  Aircraft::Manufacturer manufacturer;
+  int cruise_speed_mph;
+  int time_to_charge_seconds;
+  int flight_time_from_full_charge_seconds;
+  int passenger_count;
+  float probablity_of_fault_per_hour;
 } aircraft_info;
 
 aircraft_info initial_aircraft_data[] = {
@@ -101,6 +101,7 @@ void print_data_for_aircraft_type(SummaryData * summary_data){
      cout << "No aircraft from this manufacturer." << endl;
      return;
   }
+  cout << "Number of aircraft: " << summary_data->total_aircraft << endl;
   cout << "Total fight time: " << (float) summary_data->total_flight_seconds / 3600.0 << " hours" << endl;
 
   if (0 == summary_data->total_number_of_flights) {
@@ -147,9 +148,7 @@ void SimulationManager::report_on_data(void){
               summary_data.total_aircraft++; // We found a match.
               summary_data.total_flight_seconds += all_aircraft[j].total_seconds_flying;
               summary_data.total_number_of_flights += all_aircraft[j].number_of_flights;
-              cout << "total seconds charging :" << all_aircraft[j].total_seconds_charging << endl;
               summary_data.total_charging_seconds += all_aircraft[j].total_seconds_charging;
-              cout << "total number of charges: " << all_aircraft[j].number_of_charges << endl;
               summary_data.total_number_of_charges += all_aircraft[j].number_of_charges;
               summary_data.total_faults += all_aircraft[j].total_faults;
           }
