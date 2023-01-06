@@ -31,9 +31,7 @@ public:
    FaultGenerator fault_generator;
 
    void create_aircraft(void);
-   
    void run_simulation(void);
-
    void report_on_data(void);
 };
 

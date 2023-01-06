@@ -57,17 +57,16 @@ int time_to_charge_seconds;
 int flight_seconds_per_charge;
 int passenger_count;
 float probablity_of_fault_per_hour;
-
 int total_faults;
 int total_seconds;
 int total_seconds_flying;
-int seconds_flying_this_charge;
-int seconds_charging_current_charge;
 int flight_start_second;
 int charge_start_second;
 int aircraft_id;
 int current_charger_id;
-
+int number_of_flights;
+int number_of_charges;
+int total_seconds_charging;
  
 public:
 Aircraft();

@@ -20,8 +20,9 @@ current_state = before_simulation;
 total_faults = 0;
 total_seconds = 0;
 total_seconds_flying = 0;
-seconds_flying_this_charge = 0;
-seconds_charging_current_charge = 0;
+int number_of_flights = 0;
+int number_of_charges = 0;
+int total_seconds_charging = 0;
 };
 
 Aircraft Aircraft::operator()(Manufacturer manu,
@@ -71,6 +72,7 @@ string Aircraft::get_manufacturer_string(Aircraft::Manufacturer manufacturer_in)
 
 void Aircraft::one_second_tick(void){
   total_seconds++;
+
   // Check for faults once a minute.
   if ((total_seconds % 60) == 0){
      if (g_fault_generator->did_a_fault_occur(probablity_of_fault_per_hour / 60)){
@@ -86,6 +88,7 @@ void Aircraft::one_second_tick(void){
       current_state = flying; 
       flight_start_second = total_seconds;
       total_seconds_flying++;
+      number_of_flights++;
       cout << "Aircraft " << aircraft_id << " " << get_manufacturer_string(manufacturer);
       cout << " flying at second: " << total_seconds << endl;
       break;
@@ -117,10 +120,12 @@ void Aircraft::one_second_tick(void){
             current_state = flying; 
             flight_start_second = total_seconds;
             total_seconds_flying++;
+            number_of_flights++;
             cout << "Aircraft " << aircraft_id << " " << get_manufacturer_string(manufacturer);
             cout << " flying at second: " << total_seconds << endl;
+      } else {
+          total_seconds_charging++;
       }
-
       break;
     case (after_simulation):
       break;
@@ -140,6 +145,7 @@ int Aircraft::get_aircraft_id(void){
 void Aircraft::start_charging(int charger_id){
   current_charger_id = charger_id;
   charge_start_second = total_seconds;
+  number_of_charges++;
   cout << "Aircraft " << aircraft_id << " " << get_manufacturer_string(manufacturer);
   cout << " started charging at second: " << total_seconds;
   cout << " charger id " << current_charger_id << endl;
