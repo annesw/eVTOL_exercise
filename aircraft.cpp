@@ -20,9 +20,9 @@ current_state = before_simulation;
 total_faults = 0;
 total_seconds = 0;
 total_seconds_flying = 0;
-int number_of_flights = 0;
-int number_of_charges = 0;
-int total_seconds_charging = 0;
+number_of_flights = 0;
+number_of_charges = 0;
+total_seconds_charging = 0;
 };
 
 Aircraft Aircraft::operator()(Manufacturer manu,

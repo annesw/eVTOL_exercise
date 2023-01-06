@@ -96,16 +96,30 @@ void print_data_for_aircraft_type(SummaryData * summary_data){
   float average_time_charging_per_session_in_hours;
   float total_passenger_miles;
   cout << endl << "Results for manufacturer " << Aircraft::get_manufacturer_string((Aircraft::Manufacturer) summary_data->type) << endl;
-  cout << "Total fight time: " << (float) summary_data->total_flight_seconds / 3600.0 << " miles" << endl;
+  
+  if (0 == summary_data->total_aircraft){
+     cout << "No aircraft from this manufacturer." << endl;
+     return;
+  }
+  cout << "Total fight time: " << (float) summary_data->total_flight_seconds / 3600.0 << " hours" << endl;
 
-  average_time_per_flight_hours = ((float)summary_data->total_flight_seconds / 3600.0) / (float) summary_data->total_number_of_flights;
+  if (0 == summary_data->total_number_of_flights) {
+      average_time_per_flight_hours = 0; 
+  } else {
+      average_time_per_flight_hours = ((float)summary_data->total_flight_seconds / 3600.0) / (float) summary_data->total_number_of_flights;
+  }
   cout << "Average time per flight: " << average_time_per_flight_hours << " hours" << endl;
 
   average_distance_per_flight_in_miles = average_time_per_flight_hours * summary_data->cruise_speed;
-  cout << "Average distances traveled per_flight: " << average_distance_per_flight_in_miles << " miles" << endl;
-
-  average_time_charging_per_session_in_hours = ((float) summary_data->total_charging_seconds / 3600.0) / (float) summary_data->total_number_of_charges;
-  cout << "Average time charging per charge session: " << average_time_charging_per_session_in_hours << endl;
+  cout << "Average distances traveled per flight: " << average_distance_per_flight_in_miles << " miles" << endl;
+   
+  
+  if (0 == summary_data->total_number_of_charges) {
+      average_time_charging_per_session_in_hours = 0;
+  } else {
+      average_time_charging_per_session_in_hours = ((float) summary_data->total_charging_seconds / 3600.0) / (float) summary_data->total_number_of_charges;
+  }
+  cout << "Average time charging per charge session: " << average_time_charging_per_session_in_hours << " hours" << endl;
   cout << "Total number of faults: " << summary_data->total_faults << endl;
 
   total_passenger_miles = ((float) summary_data->total_flight_seconds / 3600.0) * summary_data->passenger_count;
@@ -114,18 +128,32 @@ void print_data_for_aircraft_type(SummaryData * summary_data){
 
 void SimulationManager::report_on_data(void){
   int i, j;
+  Aircraft::Manufacturer manufacturer;
   SummaryData summary_data; 
   for (i = 0; i < NUMBER_OF_AIRCRAFT_MANUFACTURERS ; i++){
   // Gather data.
-     summary_data.type = i;
-     summary_data.total_aircraft = 5;
-     summary_data.total_flight_seconds = 300;
-     summary_data.total_number_of_flights =  5;
-     summary_data.total_charging_seconds = 150;
-     summary_data.total_number_of_charges = 3;
-     summary_data.cruise_speed = 150;
-     summary_data.total_faults = 30;
-     summary_data.passenger_count = 4;
+      manufacturer = (Aircraft::Manufacturer) i;
+      summary_data.type = i;
+      summary_data.total_aircraft = 0;
+      summary_data.total_flight_seconds = 0;
+      summary_data.total_number_of_flights =  0;
+      summary_data.total_charging_seconds = 0;
+      summary_data.total_number_of_charges = 0;
+      summary_data.cruise_speed = initial_aircraft_data[i].cruise_speed_mph;
+      summary_data.total_faults = 0;
+      summary_data.passenger_count = initial_aircraft_data[i].passenger_count;
+      for (j = 0; j < NUMBER_OF_AIRCRAFT ; j++) {
+          if (manufacturer == all_aircraft[j].manufacturer) {
+              summary_data.total_aircraft++; // We found a match.
+              summary_data.total_flight_seconds += all_aircraft[j].total_seconds_flying;
+              summary_data.total_number_of_flights += all_aircraft[j].number_of_flights;
+              cout << "total seconds charging :" << all_aircraft[j].total_seconds_charging << endl;
+              summary_data.total_charging_seconds += all_aircraft[j].total_seconds_charging;
+              cout << "total number of charges: " << all_aircraft[j].number_of_charges << endl;
+              summary_data.total_number_of_charges += all_aircraft[j].number_of_charges;
+              summary_data.total_faults += all_aircraft[j].total_faults;
+          }
+      } 
 
   // Print data.
       print_data_for_aircraft_type(&summary_data);

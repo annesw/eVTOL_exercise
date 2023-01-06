@@ -90,6 +90,8 @@ int get_aircraft_id(void);
 void put_aircraft_in_charging_queue(void);
 void aircraft_report_done_charging_and_detach(void);
 
+friend class SimulationManager;
+
 };
 
 #endif // AIRCRAFT_H
